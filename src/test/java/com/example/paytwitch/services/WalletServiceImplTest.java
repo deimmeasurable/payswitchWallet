@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ class WalletServiceImplTest {
     public void testThatWalletIsCreatedForNewUser(){
 
         WalletRequest newWallet = WalletRequest.builder()
-                .Balance(00.0)
+                .Balance(BigDecimal.ZERO)
                 .userName("tolu@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -63,7 +64,7 @@ class WalletServiceImplTest {
     @Test
     public void testThatBalanceCanBeCredit(){
         WalletRequest newWallet = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.valueOf(00.00))
                 .userName("tolu@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -72,7 +73,7 @@ class WalletServiceImplTest {
         walletService.createWallet(newWallet);
 
         CreditWalletRequest creditRequest = new CreditWalletRequest();
-        creditRequest.setBalance(50000.00);
+        creditRequest.setBalance(BigDecimal.valueOf(50000.00));
         creditRequest.setWallet(WalletType.BASIC);
         creditRequest.setTransactionList(new ArrayList<>());
         creditRequest.setUserName("tolu@gmail.com");
@@ -81,12 +82,12 @@ class WalletServiceImplTest {
         CreditWalletResponse creditBalanceResponse = walletService.creditUserBalance(creditRequest);
         assertEquals("tolu@gmail.com",creditBalanceResponse.getUserName());
         assertEquals("5678",creditBalanceResponse.getPin());
-        assertEquals(50000.00,creditBalanceResponse.getBalance());
+        assertEquals(BigDecimal.valueOf(50000.00),creditBalanceResponse.getBalance());
     }
     @Test
     public void testThatWalletCanBeUpgradedFromBasicToStandard() {
         WalletRequest newWallet = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.valueOf(00.00))
                 .userName("tolu@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -94,7 +95,7 @@ class WalletServiceImplTest {
                 .build();
         walletService.createWallet(newWallet);
         CreditWalletRequest creditRequest = new CreditWalletRequest();
-        creditRequest.setBalance(50000.00);
+        creditRequest.setBalance(BigDecimal.valueOf(50000.00));
         creditRequest.setTransactionList(new ArrayList<>());
         creditRequest.setUserName("tolu@gmail.com");
         creditRequest.setPin("5678");
@@ -107,7 +108,7 @@ class WalletServiceImplTest {
          UpgradeWalletResponse upgradeWallet = walletService.upgradeUserWallet(upgradeRequest);
 
          assertEquals(WalletType.STANDARD, upgradeWallet.getWalletType());
-         assertThat(upgradeWallet.getBalance()).isLessThanOrEqualTo(70000);
+         assertThat(upgradeWallet.getBalance()).isLessThanOrEqualTo(BigDecimal.valueOf(70000));
          assertEquals("wallet upgraded successfully",upgradeWallet.getMessage());
 
 
@@ -115,7 +116,7 @@ class WalletServiceImplTest {
     @Test
     public void testThatWalletTypeIsBasic(){
         WalletRequest newWallet = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.valueOf(00.00))
                 .userName("tolu@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -132,7 +133,7 @@ class WalletServiceImplTest {
         upgradeWallet.setWalletType(WalletType.BASIC);
 
         assertEquals(WalletType.BASIC, upgradeWallet.getWalletType());
-       assertThat(upgradeWallet.getBalance()).isLessThan(50000.0);
+       assertThat(upgradeWallet.getBalance()).isLessThan(BigDecimal.valueOf(50000.0));
         assertEquals("walletType is Basic",upgradeWallet.getMessage());
 
 
@@ -140,7 +141,7 @@ class WalletServiceImplTest {
     @Test
     public void testThatUserCanCheckBalanceInsideWallet(){
         WalletRequest newWallet2 = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.ZERO)
                 .userName("layo@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -153,11 +154,11 @@ class WalletServiceImplTest {
         checkBalanceRequest.setPin("6060");
         checkBalanceRequest.setMessage("user view current balance");
         checkBalanceRequest.setDate(LocalDate.now());
-        checkBalanceRequest.setBalance(00.00);
+        checkBalanceRequest.setBalance(BigDecimal.ZERO);
 
         CheckBalanceResponse checkBalanceResponse = walletService.userCanCheckCurrentBalance(checkBalanceRequest);
 
-        assertEquals(00.00,checkBalanceResponse.getBalance());
+        assertEquals(BigDecimal.ZERO,checkBalanceResponse.getBalance());
         assertEquals("layo@gmail.com",checkBalanceResponse.getUserName());
         assertEquals("user view current balance",checkBalanceResponse.getMessage());
         assertEquals("6060",checkBalanceResponse.getPin());
@@ -167,7 +168,7 @@ class WalletServiceImplTest {
     @Test
     public void testThatExceptionIsThrownIfUserEnterAWrongPin(){
         WalletRequest newWallet2 = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.ZERO)
                 .userName("layo@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -176,7 +177,7 @@ class WalletServiceImplTest {
 
         walletService.createWallet(newWallet2);
         CreditWalletRequest creditRequest = new CreditWalletRequest();
-        creditRequest.setBalance(50000.00);
+        creditRequest.setBalance(BigDecimal.valueOf(50000.00));
         creditRequest.setWallet(WalletType.BASIC);
         creditRequest.setTransactionList(new ArrayList<>());
         creditRequest.setUserName("layo@gmail.com");
@@ -187,7 +188,7 @@ class WalletServiceImplTest {
     @Test
     public void testThatExceptionIsThrownIfUserWithWrongUsername(){
         WalletRequest newWallet2 = WalletRequest.builder()
-                .Balance(00.00)
+                .Balance(BigDecimal.ZERO)
                 .userName("layo@gmail.com")
                 .wallet(WalletType.BASIC)
                 .TransactionList(new ArrayList<>())
@@ -199,7 +200,7 @@ class WalletServiceImplTest {
         checkBalanceRequest.setPin("6060");
         checkBalanceRequest.setMessage("user view current balance");
         checkBalanceRequest.setDate(LocalDate.now());
-        checkBalanceRequest.setBalance(00.00);
+        checkBalanceRequest.setBalance(BigDecimal.ZERO);
 
         assertThrows(WalletNotFoundException.class,()-> walletService.userCanCheckCurrentBalance(checkBalanceRequest));
 

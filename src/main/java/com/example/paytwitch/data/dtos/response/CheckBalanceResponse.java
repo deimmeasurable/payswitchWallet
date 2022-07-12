@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckBalanceResponse {
-    private String UserName;
+    private String userName;
     private String pin;
     private LocalDate date = LocalDate.now();
     private String message;
-    private BigDecimal Balance;
+    private BigDecimal balance;
 }

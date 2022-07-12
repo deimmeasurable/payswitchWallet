@@ -8,7 +8,6 @@ import com.example.paytwitch.services.UserService;
 import com.example.paytwitch.data.dtos.request.UserRequestLogInDto;
 //import com.example.paytwitch.services.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/emailApp/auth")
+@RequestMapping("/api/v1/payTwitchApp/auth")
 public class AuthController {
     @Autowired
     private UserService userService;
@@ -39,13 +38,13 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public Response login(@RequestBody UserRequestLogInDto loginRequest) {
+    public com.example.paytwitch.controller.Response login(@RequestBody UserRequestLogInDto loginRequest) {
         String token;
         try {
 
             token = loginService.login(loginRequest).getAccessToken();
         } catch (WalletException e) {
-            return new Response(HttpStatus.BAD_REQUEST,false,e.getMessage());
+            return new com.example.paytwitch.controller.Response(HttpStatus.BAD_REQUEST,false,e.getMessage());
         }
         return new Response(HttpStatus.OK,true,token);
 

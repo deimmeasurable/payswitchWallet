@@ -4,7 +4,9 @@ import com.example.paytwitch.data.dtos.request.UserRequestLogInDto;
 import com.example.paytwitch.data.models.AccessToken;
 import com.example.paytwitch.data.models.User;
 import com.example.paytwitch.exception.UserNotFoundException;
+import com.example.paytwitch.security.jwt.TokenServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,12 +25,12 @@ public class LoginServiceImpl implements LoginService{
     @Autowired
     UserDetailsService userDetailsService;
 
-//    @Autowired
-    TokenService tokenService;
+@Autowired
+    TokenServices tokenService;
 
-    public LoginServiceImpl(TokenService tokenService){
-       this.tokenService= tokenService;
-    }
+//    public LoginServiceImpl(TokenService tokenService){
+//       this.tokenService= tokenService;
+//    }
     @Override
     public AccessToken login(UserRequestLogInDto loginRequest) throws UserNotFoundException {
         User user = userService.findUserByEmail(loginRequest.getEmail());

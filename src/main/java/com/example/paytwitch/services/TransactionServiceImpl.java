@@ -39,9 +39,9 @@ public class TransactionServiceImpl implements TransactionService {
         if(secondUserWallet.isEmpty()){
             throw new WalletNotFoundException(secondUserWallet.get().getUserName()+ ",wallet not found, because user doesn't exist");
         }
-//        if(foundWallet.get().getBalance() > 0){
-//           foundWallet.get().setTransfer((int) transactionRequest.getAmount());
-//        }
+        if(foundWallet.get().getBalance().compareTo(new BigDecimal("00.00")) > 0){
+           foundWallet.get().setTransfer((int) transactionRequest.getAmount());
+        }
         Wallet savedFoundedWallet = walletRepository.save(foundWallet.get());
 
         Transaction transaction = new Transaction();

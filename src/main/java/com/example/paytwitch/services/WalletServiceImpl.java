@@ -90,7 +90,7 @@ public class WalletServiceImpl implements WalletService {
         if (foundWallet.isEmpty()) {
             throw new WalletNotFoundException("wallet not found, because user doesn't exist");
         }
-        if (foundWallet.get().getBalance().compareTo(BigDecimal.valueOf(49000.00))>0 && foundWallet.get().getBalance().compareTo(BigDecimal.valueOf(100000.00))>0){
+        if (foundWallet.get().getBalance().compareTo(new BigDecimal("49000.00"))>0 && foundWallet.get().getBalance().compareTo(new BigDecimal("100000.00"))<0){
             foundWallet.get().setWallet(WalletType.STANDARD);
         }
         Wallet savedWallet = walletRepository.save(foundWallet.get());
@@ -111,7 +111,7 @@ public class WalletServiceImpl implements WalletService {
         if (wallet.isEmpty()) {
             throw new WalletNotFoundException("wallet not found, because user doesn't exist");
         }
-        if (wallet.get().getBalance().compareTo(BigDecimal.valueOf(00.00))>0  && wallet.get().getBalance().compareTo(BigDecimal.valueOf(49000.00))>=49000.00) {
+        if (wallet.get().getBalance().compareTo(new BigDecimal("00.00"))>0  && wallet.get().getBalance().compareTo(new BigDecimal("49000.00"))< 0) {
             wallet.get().setWallet(WalletType.BASIC);
         }
         Wallet newWalletStatus = walletRepository.save(wallet.get());

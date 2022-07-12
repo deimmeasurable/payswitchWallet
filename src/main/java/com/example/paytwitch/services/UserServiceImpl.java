@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
         User newUser = new User();
-        newUser.setEmail(form.getEmail());
+        newUser.setEmail(form.getEmail().toLowerCase(Locale.ROOT));
         if (checkIfEmailAlreadyExists(form.getEmail())) throw new UserAlreadyExistsException("email already exist");
         newUser.setPassword(form.getPassword());
         newUser.setFirstName(form.getFirstName());
@@ -61,6 +61,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
         return userResponse;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(()-> new UserNotFoundException("user not found"));
+        return user;
     }
 
     @Override
